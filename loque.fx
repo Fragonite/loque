@@ -1,127 +1,171 @@
-#include "ReShade.fxh"
+texture BackBufferTex : COLOR;
 
-#ifndef ENABLE_BORDER_XH
-#define ENABLE_BORDER_XH 0
-#endif
+uniform bool ENABLE_DOT_XH
+<
+	ui_label = "Enable Dot";
+	ui_spacing = 8;
+> = true;
 
-#ifndef ENABLE_CIRCLE_BORDER_XH
-#define ENABLE_CIRCLE_BORDER_XH 0
-#endif
+uniform float DOT_RADIUS_XH
+<
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 60.0;
+	ui_label = "Radius";
+	ui_step = 1.0;
+> = 2.0;
 
-#ifndef ENABLE_DOT_XH
-#define ENABLE_DOT_XH 1
-#endif
+uniform bool ENABLE_CIRCLE_XH
+<
+	ui_label = "Enable Circle";
+	ui_spacing = 8;
+> = true;
 
-#ifndef ENABLE_CIRCLE_XH
-#define ENABLE_CIRCLE_XH 1
-#endif
+uniform float CIRCLE_RADIUS_XH
+<
+	ui_label = "Radius";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 60.0;
+	ui_step = 1.0;
+> = 32.0;
 
-#ifndef ENABLE_SQUARE_XH
-#define ENABLE_SQUARE_XH 0
-#endif
+uniform float CIRCLE_THICKNESS_XH
+<
+	ui_label = "Thiccness";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 60.0;
+	ui_step = 1.0;
+> = 4.0;
 
-#ifndef ENABLE_CROSS_XH
-#define ENABLE_CROSS_XH 0
-#endif
+uniform float4 CIRCLE_COLOUR_XH
+<
+	ui_label = "Colour";
+	ui_type = "color";
+> = float4(1.0, 1.0, 1.0, 0.125);
 
-#ifndef ENABLE_CROSS_UP_XH
-#define ENABLE_CROSS_UP_XH 0
-#endif
+uniform uint CIRCLE_BLENDING_XH
+<
+	ui_label = " ";
+	ui_type = "radio";
+	ui_items = "Linear\0Additive/Mixed\0Inversion\0";
+> = 1;
+
+uniform bool ENABLE_CROSS_XH
+<
+	ui_label = "Enable Cross";
+	ui_spacing = 8;
+> = false;
+
+uniform bool ENABLE_CROSS_UP_XH
+<
+	ui_label = "Enable Top Section";
+> = false;
+
+uniform float CROSS_LENGTH_XH
+<
+	ui_label = "Length";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 120.0;
+	ui_step = 1.0;
+> = 18.0;
+
+uniform float CROSS_THICKNESS_XH
+<
+	ui_label = "Thiccness";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 120.0;
+	ui_step = 1.0;
+> = 2.0;
+
+uniform float CROSS_GAP_XH
+<
+	ui_label = "Gap";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 120.0;
+	ui_step = 1.0;
+> = 10.0;
+
+uniform bool ENABLE_SQUARE_XH
+<
+	ui_label = "Enable Square";
+	ui_spacing = 8;
+> = false;
+
+uniform float SQUARE_LENGTH_XH
+<
+	ui_label = "Length";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 120.0;
+	ui_step = 1.0;
+> = 2.0;
+
+uniform float SQUARE_THICKNESS_XH
+<
+	ui_label = "Thiccness";
+	ui_type = "drag";
+	ui_min = 0.0;
+	ui_max = 60.0;
+	ui_step = 1.0;
+> = 1.0;
+
+uniform float4 FILL_COLOUR_XH
+<
+	ui_label = "Colour";
+	ui_type = "color";
+	ui_spacing = 8;
+> = float4(0.0, 1.0, 0.0, 1.0);
+
+uniform int BLENDING_XH
+<
+	ui_label = " ";
+	ui_type = "radio";
+	ui_items = "Linear\0Additive/Mixed\0Inversion\0";
+>;
+
+uniform float4 BORDER_COLOUR_XH
+<
+	ui_label = "Border";
+	ui_type = "color";
+	ui_spacing = 8;
+> = float4(0.0, 0.0, 0.0, 1.0);
+
+uniform bool ENABLE_BORDER_XH
+<
+	ui_label = "Enable Border";
+> = false;
+
+uniform bool ENABLE_CIRCLE_BORDER_XH
+<
+	ui_label = "Enable Circle Border";
+> = false;
+
 
 // #ifndef BORDER_THICKNESS_XH
-#define BORDER_THICKNESS_XH 1.0
+#define BORDER_THICKNESS_XH 999.0
 // #endif
 
-#ifndef DOT_RADIUS_XH
-#define DOT_RADIUS_XH 2
-#endif
+uniform float OFFSET_X_XH
+<
+	ui_label = "X Offset";
+	ui_type = "drag";
+	ui_step = 1.0;
+> = 0.0;
 
-#ifndef CIRCLE_RADIUS_XH
-#define CIRCLE_RADIUS_XH 32.5
-#endif
+uniform float OFFSET_Y_XH
+<
+	ui_label = "Y Offset";
+	ui_type = "drag";
+	ui_step = 1.0;
+> = 0.0;
 
-#ifndef CIRCLE_THICKNESS_XH
-#define CIRCLE_THICKNESS_XH 4
-#endif
-
-#ifndef SQUARE_LENGTH_XH
-#define SQUARE_LENGTH_XH 1.5
-#endif
-
-#ifndef SQUARE_THICKNESS_XH
-#define SQUARE_THICKNESS_XH 1.0
-#endif
-
-#ifndef CROSS_LENGTH_XH
-#define CROSS_LENGTH_XH 9.5
-#endif
-
-#ifndef CROSS_THICKNESS_XH
-#define CROSS_THICKNESS_XH 1.5
-#endif
-
-#ifndef CROSS_GAP_XH
-#define CROSS_GAP_XH 5.5
-#endif
-
-#ifndef RED_CHANNEL_XH
-#define RED_CHANNEL_XH 0.0
-#endif
-
-#ifndef BLUE_CHANNEL_XH
-#define BLUE_CHANNEL_XH 0.0
-#endif
-
-#ifndef GREEN_CHANNEL_XH
-#define GREEN_CHANNEL_XH 1.0
-#endif
-
-#ifndef ALPHA_CHANNEL_XH
-#define ALPHA_CHANNEL_XH 1.0
-#endif
-
-#ifndef RED_BORDER_CHANNEL_XH
-#define RED_BORDER_CHANNEL_XH 0.0
-#endif
-
-#ifndef BLUE_BORDER_CHANNEL_XH
-#define BLUE_BORDER_CHANNEL_XH 0.0
-#endif
-
-#ifndef GREEN_BORDER_CHANNEL_XH
-#define GREEN_BORDER_CHANNEL_XH 0.0
-#endif
-
-#ifndef ALPHA_BORDER_CHANNEL_XH
-#define ALPHA_BORDER_CHANNEL_XH 1.0
-#endif
-
-#ifndef RED_CIRCLE_CHANNEL_XH
-#define RED_CIRCLE_CHANNEL_XH 1.0
-#endif
-
-#ifndef BLUE_CIRCLE_CHANNEL_XH
-#define BLUE_CIRCLE_CHANNEL_XH 1.0
-#endif
-
-#ifndef GREEN_CIRCLE_CHANNEL_XH
-#define GREEN_CIRCLE_CHANNEL_XH 1.0
-#endif
-
-#ifndef ALPHA_CIRCLE_CHANNEL_XH
-#define ALPHA_CIRCLE_CHANNEL_XH 0.125
-#endif
-
-#ifndef OFFSET_Y_XH
-#define OFFSET_Y_XH 0
-#endif
-
-#ifndef OFFSET_X_XH
-#define OFFSET_X_XH 0
-#endif
-
-#define SDF_WIDTH 128
-#define SDF_HEIGHT 128
+#define SDF_WIDTH 128.0
+#define SDF_HEIGHT 128.0
 
 texture2D xhtex
 {
@@ -136,15 +180,15 @@ sampler2D xhsam
 	// AddressU = CLAMP;
 	// AddressV = CLAMP;
 	
-	MagFilter = POINT;
-	MinFilter = POINT;
-	MipFilter = POINT;
+	// MagFilter = POINT;
+	// MinFilter = POINT;
+	// MipFilter = POINT;
 
 };
 
 sampler2D bbsam
 {
-	Texture = ReShade::BackBufferTex;
+	Texture = BackBufferTex;
 	// AddressU = CLAMP;
 	// AddressV = CLAMP;
 	// SRGBTexture = true;
@@ -202,7 +246,10 @@ float dot_distance(float2 p, float radius)
 
 float open_circle_distance(float2 p, float radius, float width)
 {
-	return abs(dot_distance(p, radius - (0.5 + (width * 0.5)))) - (0.5 + (width * 0.5));
+	// return abs(dot_distance(p, radius - (0.5 + (width * 0.5)))) - (0.5 + (width * 0.5));
+	float c1 = length(p) - (radius + 0.5);
+	float c2 = length(p) - ((radius + 0.5) - (width + 1.0));
+	return subtract(c2, c1);
 }
 
 float box_distance(float2 p, float2 size, float radius)
@@ -217,57 +264,59 @@ float2 translate(float2 p, float2 t)
 	return p - t;
 }
 
-float4 init_crosshair_texture(float4 vpos : SV_Position, float2 co : TexCoord) : SV_Target
+float4 ps_init_crosshair_texture(float4 vpos : SV_Position, float2 co : TexCoord) : SV_Target
 {
-	float4 colour = /*srgba_to_linear*/(float4(RED_CHANNEL_XH, GREEN_CHANNEL_XH, BLUE_CHANNEL_XH, ALPHA_CHANNEL_XH));
-	float4 border = /*srgba_to_linear*/(float4(RED_BORDER_CHANNEL_XH, GREEN_BORDER_CHANNEL_XH, BLUE_BORDER_CHANNEL_XH, ALPHA_BORDER_CHANNEL_XH));
-	float4 circle = /*srgba_to_linear*/(float4(RED_CIRCLE_CHANNEL_XH, GREEN_CIRCLE_CHANNEL_XH, BLUE_CIRCLE_CHANNEL_XH, ALPHA_CIRCLE_CHANNEL_XH));
+	float4 colour = FILL_COLOUR_XH;//srgba_to_linear(FILL_COLOUR_XH);
+	float4 border = BORDER_COLOUR_XH;//srgba_to_linear(BORDER_COLOUR_XH);
+	float4 circle = CIRCLE_COLOUR_XH;//srgba_to_linear(CIRCLE_COLOUR_XH);
 	float2 offset = float2(0.5, 0.5);
 	float2 centre = float2(SDF_WIDTH / 2.0, SDF_HEIGHT / 2.0);
 	float4 cpx = float4(0.0, 0.0, 0.0, 0.0);
 	float4 px = float4(0.0, 0.0, 0.0, 0.0);
 	float d = 999;
 	
-	if(!!(ENABLE_CROSS_XH))//IF TRUE.
+	float xl = CROSS_LENGTH_XH / 2 + 0.5;
+	float xt = CROSS_THICKNESS_XH / 2 + 0.5;
+	float xg = CROSS_GAP_XH / 2 - 0.5;
+	
+	if(ENABLE_CROSS_XH)
 	{
-		float hcross = box_distance(translate(vpos.xy + offset, centre), float2(CROSS_LENGTH_XH, CROSS_THICKNESS_XH), 0.0);
+		float hcross = box_distance(translate(vpos.xy + offset, centre), float2(xl, xt), 0.0);
 		d = merge(d, hcross);
-		float vcross = box_distance(translate(vpos.xy + offset, centre), float2(CROSS_THICKNESS_XH, CROSS_LENGTH_XH), 0.0);
+		float vcross = box_distance(translate(vpos.xy + offset, centre), float2(xt, xl), 0.0);
 		d = merge(d, vcross);
 		if(CROSS_GAP_XH > 0.0)
 		{
-			float subcross = box_distance(translate(vpos.xy + offset, centre), float2(CROSS_GAP_XH - 1.0, CROSS_GAP_XH - 1.0), 0.0);
+			float subcross = (ENABLE_CROSS_UP_XH) ? 
+			box_distance(translate(vpos.xy + offset, centre), float2(xg, xg), 0.0) :
+			box_distance(translate(vpos.xy + offset, centre - float2(0.0, xt)), float2(xg, xg + xt), 0.0);
 			
-			if(!(ENABLE_CROSS_UP_XH))
-			{
-				subcross = box_distance(translate(vpos.xy + offset, centre - float2(0.0, 1.0)), float2(CROSS_GAP_XH - 1.0, CROSS_GAP_XH), 0.0);
-				float subcrossUp = box_distance(translate(vpos.xy + offset, centre - float2(0, CROSS_LENGTH_XH / 2 + CROSS_THICKNESS_XH)), float2(CROSS_THICKNESS_XH + 1.0, CROSS_LENGTH_XH / 2), 0.0);
-				subcross = merge(subcross, subcrossUp);
-			}
 			d = subtract(subcross, d);
 		}
 		if(!(ENABLE_CROSS_UP_XH))
 		{
-			float subcross = box_distance(translate(vpos.xy + offset, centre - float2(0, CROSS_LENGTH_XH / 2 + CROSS_THICKNESS_XH)), float2(CROSS_THICKNESS_XH + 1.0, CROSS_LENGTH_XH / 2), 0.0);
+			float subcross = box_distance(translate(vpos.xy + offset, centre - float2(0, xl + xt)), float2(xt + 2.0, xl), 0.0);
 			d = subtract(subcross, d);
 		}
 	}
 	
-	if(!!(ENABLE_DOT_XH))
+	if(ENABLE_DOT_XH)
 	{
 		float dot = dot_distance(translate(vpos.xy + offset, centre), DOT_RADIUS_XH + 0.5);
 		d = merge(d, dot);
 	}
 	
-	if(!!(ENABLE_SQUARE_XH))
+	if(ENABLE_SQUARE_XH)
 	{
-		float square1 = box_distance(translate(vpos.xy + offset, centre), float2(SQUARE_LENGTH_XH, SQUARE_LENGTH_XH), 0.0);
-		float square2 = box_distance(translate(vpos.xy + offset, centre), float2(SQUARE_LENGTH_XH, SQUARE_LENGTH_XH) - float2(SQUARE_THICKNESS_XH * 2, SQUARE_THICKNESS_XH * 2), 0.0);
+		float sl = SQUARE_LENGTH_XH / 2.0 + 0.5;
+		float square1 = box_distance(translate(vpos.xy + offset, centre), float2(sl, sl), 0.0);
+		float square2 = box_distance(translate(vpos.xy + offset, centre), float2(sl, sl) - float2(SQUARE_THICKNESS_XH + 1.0, SQUARE_THICKNESS_XH + 1.0), 0.0);
 		d = merge(d, subtract(square2, square1));
 	}
 	
-	if(!!(ENABLE_CIRCLE_XH))
+	if(ENABLE_CIRCLE_XH)
 	{
+		float cd = open_circle_distance(translate(vpos.xy + offset, centre), CIRCLE_RADIUS_XH, CIRCLE_THICKNESS_XH);
 		if(
 			ENABLE_CIRCLE_BORDER_XH == ENABLE_BORDER_XH &&
 			circle.r == colour.r &&
@@ -276,14 +325,12 @@ float4 init_crosshair_texture(float4 vpos : SV_Position, float2 co : TexCoord) :
 			circle.a == colour.a
 			)
 		{
-			float c = open_circle_distance(translate(vpos.xy + offset, centre), CIRCLE_RADIUS_XH, CIRCLE_THICKNESS_XH);
-			d = merge(d, c);
+			d = merge(d, cd);
 		}
 		else
 		{
-			if(!!(ENABLE_CIRCLE_BORDER_XH))
+			if(ENABLE_CIRCLE_BORDER_XH)
 			{
-				float cd = open_circle_distance(translate(vpos.xy + offset, centre), CIRCLE_RADIUS_XH, CIRCLE_THICKNESS_XH);
 				float4 bpx = border;
 				bpx.a *= border_mask(cd, BORDER_THICKNESS_XH);
 				cpx = lerp(bpx, circle, fill_mask(cd));
@@ -291,12 +338,13 @@ float4 init_crosshair_texture(float4 vpos : SV_Position, float2 co : TexCoord) :
 			else
 			{
 				cpx = circle;
-				cpx.a *= fill_mask(open_circle_distance(translate(vpos.xy + offset, centre), CIRCLE_RADIUS_XH, CIRCLE_THICKNESS_XH));
+				cpx.a *= fill_mask(cd);
 			}
+			cpx.a = -cpx.a;
 		}
 	}
 	
-	if(!!(ENABLE_BORDER_XH))
+	if(ENABLE_BORDER_XH)
 	{
 		float4 bpx = border;
 		bpx.a *= border_mask(d, BORDER_THICKNESS_XH);
@@ -308,9 +356,9 @@ float4 init_crosshair_texture(float4 vpos : SV_Position, float2 co : TexCoord) :
 		px.a *= fill_mask(d);
 	}
 	
-	if(!!(ENABLE_CIRCLE_XH))
+	if(ENABLE_CIRCLE_XH)
 	{
-		if(cpx.a > 0.0)
+		if(cpx.a < 0.0)
 		{
 			px = cpx;
 		}
@@ -319,20 +367,55 @@ float4 init_crosshair_texture(float4 vpos : SV_Position, float2 co : TexCoord) :
 	return px;
 }
 
-float4 draw_crosshair(float4 vpos : SV_Position, float2 co : TexCoord) : SV_Target
+float4 ps_draw_crosshair(float4 vpos : SV_Position, float2 co : TexCoord, float2 bbCoord : TEXCOORD1) : SV_Target
 {
-	const float2 xhpos = float2(BUFFER_WIDTH / 2 - (SDF_WIDTH / 2) + OFFSET_X_XH, BUFFER_HEIGHT / 2 - (SDF_HEIGHT / 2) + OFFSET_Y_XH);
-	if((vpos.x >= xhpos.x) && (vpos.x < xhpos.x + SDF_WIDTH) && (vpos.y >= xhpos.y) && (vpos.y < xhpos.y + SDF_HEIGHT))
+	float4 xh = tex2D(xhsam, co);
+	float4 bb = tex2D(bbsam, bbCoord);
+	
+	if(xh.a < 0)
 	{
-		float4 bb = tex2D(bbsam, co);
-		float4 xh = tex2D(xhsam, (vpos.xy - xhpos) / SDF_WIDTH);
-		if(xh.r < 0)
+		switch(CIRCLE_BLENDING_XH)
 		{
-			return lerp(bb, float4(1.0, 1.0, 1.0, 1.0) - bb, xh.a);
+			case 0:
+			return lerp(bb, xh, -xh.a);
+			
+			case 1:
+			return lerp(bb, frac(bb) + xh, -xh.a);
+			
+			default://case 2:
+			return lerp(bb, float4(1.0, 1.0, 1.0, 1.0) - bb, -xh.a);
 		}
-		return lerp(bb, xh, xh.a);
 	}
-	return tex2D(bbsam, co);
+	
+	switch(BLENDING_XH)
+	{
+		case 0:
+		return lerp(bb, xh, xh.a);
+		
+		case 1:
+		return lerp(bb, frac(bb) + xh, xh.a);
+		
+		default://case 2:
+		return lerp(bb, float4(1.0, 1.0, 1.0, 1.0) - bb, xh.a);
+	}
+}
+
+float4 vs_quad_draw( uint vid : SV_VERTEXID, out float2 uv : TEXCOORD, out float2 bbCoord : TEXCOORD1) : SV_POSITION
+{
+	uv.y = vid % 2, uv.x = vid / 2;
+	float4 pos = float2((uv.x*2-1) * SDF_WIDTH, (1.-uv.y*2) * SDF_HEIGHT).xyxy;
+	pos.x *= BUFFER_RCP_WIDTH, pos.y *= BUFFER_RCP_HEIGHT;
+	pos = float4(pos.xy + float2(OFFSET_X_XH / (BUFFER_WIDTH / 2), OFFSET_Y_XH / (BUFFER_HEIGHT / 2)), 0, 1);
+	bbCoord = ((pos.xy * 0.5) + 0.5);
+	bbCoord.y = 1 - bbCoord.y;
+	return pos;
+}
+
+float4 vs_quad_texture( uint vid : SV_VERTEXID, out float2 uv : TEXCOORD) : SV_POSITION
+{
+	uv.y = vid % 2, uv.x = vid / 2;
+	float2 pos = float2((uv.x*2-1) * BUFFER_WIDTH, (1.-uv.y*2) * BUFFER_HEIGHT);
+	return pos.x *= BUFFER_RCP_WIDTH, pos.y *= BUFFER_RCP_HEIGHT, float4(pos, 0, 1);
 }
 
 technique SDFCrosshair
@@ -340,10 +423,14 @@ technique SDFCrosshair
 {
 	pass
 	{
+		PrimitiveTopology = TRIANGLESTRIP;
+		VertexCount = 4;
+		
 		ClearRenderTargets = true;
-		VertexShader = PostProcessVS;
-		PixelShader = init_crosshair_texture;
 		RenderTarget0 = xhtex;
+		
+		VertexShader = vs_quad_texture;
+		PixelShader = ps_init_crosshair_texture;
 	}
 }
 
@@ -353,7 +440,14 @@ technique Crosshair
     pass
     {
     	// SRGBWriteEnable = true;
-        VertexShader = PostProcessVS;
-        PixelShader = draw_crosshair;
+    	PrimitiveTopology = TRIANGLESTRIP;
+    	VertexCount = 4;
+    	
+    	// BlendEnable = true;
+    	// SrcBlend = SRCALPHA;
+    	// DestBlend = INVSRCALPHA;
+    	
+    	VertexShader = vs_quad_draw;//PostProcessVS;
+    	PixelShader = ps_draw_crosshair;
     }
 }
